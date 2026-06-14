@@ -91,7 +91,7 @@ bash install.sh --yes
 
    ```json
    {
-     "connectionString": "postgresql://aiuser:AI123456@127.0.0.1:5432/contexto",
+     "connectionString": "postgresql://usuario:contraseña@127.0.0.1:5432/contexto",
      "embeddingModel": "qwen3-embedding",
      "embeddingBaseUrl": "https://api.nan.builders/v1",
      "embeddingDimensions": 4096,
@@ -141,7 +141,7 @@ Archivo: `~/.config/opencode/memory-pg.json`
 
 | Campo | Por defecto | Descripción |
 |---|---|---|
-| `connectionString` | — | URI de conexión a PostgreSQL con pgvector |
+| `connectionString` | — | URI de conexión a PostgreSQL con pgvector (ej: `postgresql://usuario:contraseña@host:5432/contexto`) |
 | `embeddingModel` | `qwen3-embedding` | Modelo de embeddings de NaN |
 | `embeddingBaseUrl` | `https://api.nan.builders/v1` | Base URL de la API de NaN |
 | `embeddingDimensions` | `4096` | Dimensiones del vector (debe coincidir con el modelo) |
