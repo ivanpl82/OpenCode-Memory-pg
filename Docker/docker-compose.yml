@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: postgres-vector
+    restart: always
+    environment:
+      POSTGRES_USER: __PG_ADMIN_USER__
+      POSTGRES_PASSWORD: __PG_ADMIN_PASSWORD__
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata2:/var/lib/postgresql/data
+      - ./init-user.sql:/docker-entrypoint-initdb.d/init-user.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __PG_ADMIN_USER__ -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,8 @@
+{
+  "connectionString": "postgresql://user:password@host:5432/database",
+  "embeddingModel": "qwen3-embedding",
+  "embeddingBaseUrl": "https://api.nan.builders/v1",
+  "embeddingDimensions": 4096,
+  "topK": 5,
+  "similarityThreshold": 0.6
+}

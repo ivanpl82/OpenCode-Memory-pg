@@ -1,0 +1,15 @@
+{
+  "name": "opencode-memory-pg",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenCode plugin for long-term memory using PostgreSQL + pgvector",
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.17.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.7.0"
+  }
+}
