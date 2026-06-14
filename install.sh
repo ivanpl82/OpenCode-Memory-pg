@@ -491,7 +491,7 @@ psql "$CONN_STRING" -q -c "
   CREATE TABLE IF NOT EXISTS memories (
     id           SERIAL PRIMARY KEY,
     content      TEXT NOT NULL,
-    embedding    vector($DIMS),
+    embedding    halfvec($DIMS),
     metadata     JSONB DEFAULT '{}',
     scope        TEXT NOT NULL DEFAULT 'user',
     project_hash TEXT,
@@ -500,6 +500,8 @@ psql "$CONN_STRING" -q -c "
   );
   CREATE INDEX IF NOT EXISTS idx_memories_scope
     ON memories (scope, project_hash);
+  CREATE INDEX IF NOT EXISTS idx_memories_embedding_hnsw
+    ON memories USING hnsw (embedding halfvec_cosine_ops);
 " 2>/dev/null
 echo -e "  \033[32m✓\033[0m Table 'memories' ready"
 

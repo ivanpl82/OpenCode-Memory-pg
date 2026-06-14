@@ -274,9 +274,18 @@ El script:
 
 ## Notas técnicas
 
-### Sin índice ivfflat/hnsw
+### Índice HNSW con halfvec
 
-El modelo `qwen3-embedding` genera vectores de 4096 dimensiones. pgvector limita los índices ivfflat y hnsw a 2000 dimensiones como máximo. Por ahora la búsqueda es exacta (`<=>` sobre toda la tabla). Para uso personal y proyectos pequeños esto es perfectamente funcional. Si el volumen de memorias crece, se puede considerar reducción de dimensionalidad (PCA) o dividir en múltiples índices parciales.
+El modelo `qwen3-embedding` genera vectores de 4096 dimensiones. Hasta pgvector 0.7.0 se usaba el tipo `vector` (float32), limitado a 2000 dimensiones para índices. Ahora se usa el tipo `halfvec` (float16), que soporta índices HNSW hasta 4000 dimensiones sin pérdida significativa de precisión.
+
+El plugin y el instalador crean automáticamente:
+
+```sql
+CREATE INDEX IF NOT EXISTS idx_memories_embedding_hnsw
+  ON memories USING hnsw (embedding halfvec_cosine_ops);
+```
+
+Esto permite búsqueda aproximada por similitud coseno con buen rendimiento incluso con miles de memorias.
 
 ### Embeddings
 

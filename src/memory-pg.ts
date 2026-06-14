@@ -114,12 +114,12 @@ export default (async () => {
     const result = await pool.query(
       `
         SELECT id, content, metadata, scope, project_hash, created_at,
-               1 - (embedding <=> $1::vector) AS similarity
+               1 - (embedding <=> $1::halfvec) AS similarity
         FROM memories
         WHERE scope = $2
           AND ($3::text IS NULL OR project_hash = $3)
-          AND 1 - (embedding <=> $1::vector) > $4
-        ORDER BY embedding <=> $1::vector
+          AND 1 - (embedding <=> $1::halfvec) > $4
+        ORDER BY embedding <=> $1::halfvec
         LIMIT $5
       `,
       [vec, scope, projectHash ?? null, similarityThreshold, topK],
@@ -134,7 +134,7 @@ export default (async () => {
     CREATE TABLE IF NOT EXISTS memories (
       id           SERIAL PRIMARY KEY,
       content      TEXT NOT NULL,
-      embedding    vector(${embeddingDimensions}),
+      embedding    halfvec(${embeddingDimensions}),
       metadata     JSONB DEFAULT '{}',
       scope        TEXT NOT NULL DEFAULT 'user',
       project_hash TEXT,
@@ -143,6 +143,8 @@ export default (async () => {
     );
     CREATE INDEX IF NOT EXISTS idx_memories_scope
       ON memories (scope, project_hash);
+    CREATE INDEX IF NOT EXISTS idx_memories_embedding_hnsw
+      ON memories USING hnsw (embedding halfvec_cosine_ops);
   `);
 
   // ---- state ----------------------------------------------------------------
